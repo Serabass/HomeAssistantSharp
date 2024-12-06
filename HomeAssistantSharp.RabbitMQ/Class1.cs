@@ -1,4 +1,4 @@
-﻿namespace HomeAssistantSharp.RabbitMQ;
+﻿namespace HomeAssistantSharp.RabbitMQClient;
 
 public class Class1
 {
