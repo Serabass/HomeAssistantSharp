@@ -7,7 +7,7 @@ using RabbitMQ.Client.Events;
 
 #pragma warning disable CS1998
 
-public abstract class HomeAssistantRabbitMQListener<D> : HomeAssistantClientBase
+public abstract class HomeAssistantRabbitMQClient<D> : HomeAssistantClientBase
 {
   private readonly string _ip;
   private readonly short _port;
@@ -20,13 +20,18 @@ public abstract class HomeAssistantRabbitMQListener<D> : HomeAssistantClientBase
 
   private EventingBasicConsumer? consumer;
 
-  public bool Connected = false; у
+  public bool Connected = false;
 
   protected abstract D ConvertData(string str);
 
   public event EventHandler<RabbitMQListenerResult<D>>? OnDataReceived;
+  public event EventHandler? Shutdown;
 
-  public HomeAssistantRabbitMQListener(string ip, short port = 5672)
+  public bool durable = true;
+  public bool autoDelete = false;
+  public bool exclusive = false;
+
+  public HomeAssistantRabbitMQClient(string ip, short port = 5672)
   {
     _ip = ip;
     _port = port;
@@ -46,9 +51,9 @@ public abstract class HomeAssistantRabbitMQListener<D> : HomeAssistantClientBase
     channel = connection.CreateModel();
     channel.QueueDeclare(
       queue: Label,
-      durable: true,
-      exclusive: false,
-      autoDelete: false
+      durable: durable,
+      exclusive: exclusive,
+      autoDelete: autoDelete
     // arguments: new Dictionary<string, object>
     // {
     //   { "x-message-ttl", 10000 }
@@ -100,11 +105,11 @@ public abstract class HomeAssistantRabbitMQListener<D> : HomeAssistantClientBase
     consumer.Shutdown += (sender, e) =>
     {
       Console.WriteLine($"Shutdown RabbitMQ {Label} {e.ReplyCode} {e.ReplyText}. Exiting...");
-      Environment.Exit(0);
+      Connected = false;
+      Shutdown?.Invoke(this, EventArgs.Empty);
     };
 
     channel.BasicConsume(queue: Label, autoAck: false, consumer: consumer);
-
   }
 
   public override void Dispose()

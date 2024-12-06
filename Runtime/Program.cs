@@ -8,4 +8,3 @@ client.Ready += (sender, args) =>
 {
   Console.WriteLine("Ready");
 };
-
