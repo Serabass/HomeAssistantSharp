@@ -1,4 +1,4 @@
-﻿namespace Serabass.HomeAssistantSharp.Tests;
+﻿namespace Tests;
 
 public class Tests
 {
@@ -10,6 +10,6 @@ public class Tests
   [Test]
   public void Test1()
   {
-    Assert.Pass();
+    Assert.That(HomeAssistantSharp.Sandbox.Add(1, 2), Is.EqualTo(3));
   }
 }

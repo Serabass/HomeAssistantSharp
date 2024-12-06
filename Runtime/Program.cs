@@ -1,0 +1,1 @@
+﻿Console.WriteLine(Serabass.HomeAssistantSharp.Sandbox.Add(1, 2));
