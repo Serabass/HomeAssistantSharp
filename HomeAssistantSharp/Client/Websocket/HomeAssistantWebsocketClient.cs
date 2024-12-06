@@ -4,18 +4,11 @@ using System.Net.WebSockets;
 using System.Text;
 using Newtonsoft.Json;
 
-public class HomeAssistantWebsocketClient : HomeAssistantClientBase, IDisposable
+public class HomeAssistantWebsocketClient : HomeAssistantClientBase
 {
-  private readonly Uri _url;
-  private readonly string _token;
-
-  public event EventHandler AuthOk;
-  public event EventHandler AuthInvalid;
-  public event EventHandler Ready;
-
-  private ClientWebSocket _webSocket = new ClientWebSocket();
-  private MessageId _messageId = new();
-  private int _subscribeId = 0;
+  protected ClientWebSocket _webSocket = new ClientWebSocket();
+  protected readonly Uri _url;
+  protected readonly string _token;
 
   public string HAVersion { get; private set; }
 
@@ -31,17 +24,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase, IDisposable
     _token = token;
   }
 
-  private MessageType GetMessageType(string type) => type switch
-  {
-    "auth_required" => MessageType.AuthRequired,
-    "auth_ok" => MessageType.AuthOk,
-    "auth_invalid" => MessageType.AuthInvalid,
-    "result" => MessageType.Result,
-    "event" => MessageType.Event,
-    _ => MessageType.Unknown
-  };
-
-  public async Task ConnectAsync()
+  public override async Task ConnectAsync()
   {
     await _webSocket.ConnectAsync(_url, CancellationToken.None);
     await HandleMessages();
@@ -74,11 +57,11 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase, IDisposable
           break;
         case MessageType.AuthOk:
           HAVersion = json.ha_version;
-          AuthOk?.Invoke(this, EventArgs.Empty);
+          InvokeAuthOk();
           await Subscribe("state_changed");
           break;
         case MessageType.AuthInvalid:
-          AuthInvalid?.Invoke(this, EventArgs.Empty);
+          InvokeAuthInvalid();
           break;
         case MessageType.Result:
           if ((int)json.id == _subscribeId)
@@ -86,7 +69,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase, IDisposable
             if ((bool)json.success)
             {
               Console.WriteLine("Subscribed");
-              Ready?.Invoke(this, EventArgs.Empty);
+              InvokeReady();
             }
             else
             {
@@ -121,7 +104,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase, IDisposable
     await _webSocket.SendAsync(seg, WebSocketMessageType.Text, true, CancellationToken.None);
   }
 
-  public void Dispose()
+  public override void Dispose()
   {
     _webSocket.Dispose();
   }

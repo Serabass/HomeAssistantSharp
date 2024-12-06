@@ -1,4 +1,4 @@
-namespace HomeAssistantSharp.Client.Websocket;
+namespace HomeAssistantSharp.Client;
 
 public class MessageId
 {
