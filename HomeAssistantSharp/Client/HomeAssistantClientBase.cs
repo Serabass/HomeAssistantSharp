@@ -5,6 +5,7 @@ public abstract class HomeAssistantClientBase : IDisposable
   public event EventHandler AuthOk;
   public event EventHandler AuthInvalid;
   public event EventHandler Ready;
+  public event EventHandler<EventMessage> Event;
 
   protected MessageId _messageId = new();
   protected int _subscribeId = 0;
@@ -21,6 +22,7 @@ public abstract class HomeAssistantClientBase : IDisposable
   protected void InvokeAuthOk() => AuthOk?.Invoke(this, EventArgs.Empty);
   protected void InvokeAuthInvalid() => AuthInvalid?.Invoke(this, EventArgs.Empty);
   protected void InvokeReady() => Ready?.Invoke(this, EventArgs.Empty);
+  protected void InvokeEvent(object sender, EventMessage message) => Event?.Invoke(sender, message);
   public abstract Task ConnectAsync();
   public abstract void Dispose();
 }

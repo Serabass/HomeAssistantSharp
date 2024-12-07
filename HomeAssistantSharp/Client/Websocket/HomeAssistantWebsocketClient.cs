@@ -18,6 +18,12 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
     _token = token;
   }
 
+  public HomeAssistantWebsocketClient(string host, short port, string token)
+  {
+    _url = new Uri($"ws://{host}:{port}/api/websocket");
+    _token = token;
+  }
+
   public HomeAssistantWebsocketClient(Uri url, string token)
   {
     _url = url;
@@ -78,7 +84,11 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
           }
           break;
         case MessageType.Event:
-          Console.WriteLine("Event received");
+          InvokeEvent(this, new EventMessage
+          {
+            Source = message,
+            Data = json
+          });
           break;
       }
     }
