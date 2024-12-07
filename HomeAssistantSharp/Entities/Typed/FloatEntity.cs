@@ -7,9 +7,4 @@ public class FloatEntity<A>(string entityId) : Entity<float, A>(entityId) where 
 {
   public override float ConvertStateValue(HAState state) =>
     float.Parse(state.State ?? "0", CultureInfo.InvariantCulture);
-
-  public override async Task Init()
-  {
-    await base.Init();
-  }
 }

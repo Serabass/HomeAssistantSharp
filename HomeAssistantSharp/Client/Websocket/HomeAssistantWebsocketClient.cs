@@ -9,6 +9,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
   protected readonly Uri _url;
   protected readonly string _token;
 
+#pragma warning disable CS8618
   public string HAVersion { get; private set; }
 
   public HomeAssistantWebsocketClient(string url, string token) : this(new Uri(url), token) { }
@@ -20,6 +21,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
     _websocketClient = new WebsocketClient(_url);
   }
 
+#pragma warning restore CS8618
   public override async Task Init()
   {
     _websocketClient.MessageReceived += async (sender, message) =>
@@ -35,7 +37,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
           break;
         case MessageType.AuthOk:
           HAVersion = message.Data.ha_version;
-          InvokeAuthOk();
+          InvokeAuthOk(HAVersion);
           await Subscribe("state_changed");
           break;
         case MessageType.AuthInvalid:

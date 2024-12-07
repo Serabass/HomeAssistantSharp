@@ -4,7 +4,7 @@ namespace HomeAssistantSharp.Client;
 
 public abstract class HomeAssistantClientBase : IDisposable
 {
-  public event EventHandler AuthOk;
+  public event EventHandler<string> AuthOk;
   public event EventHandler AuthInvalid;
   public event EventHandler Ready;
   public event EventHandler<EventMessage> Event;
@@ -21,7 +21,7 @@ public abstract class HomeAssistantClientBase : IDisposable
     "event" => MessageType.Event,
     _ => MessageType.Unknown
   };
-  protected void InvokeAuthOk() => AuthOk?.Invoke(this, EventArgs.Empty);
+  protected void InvokeAuthOk(string version) => AuthOk?.Invoke(this, version);
   protected void InvokeAuthInvalid() => AuthInvalid?.Invoke(this, EventArgs.Empty);
   protected void InvokeReady() => Ready?.Invoke(this, EventArgs.Empty);
   protected void InvokeEvent(object sender, EventMessage message) => Event?.Invoke(sender, message);

@@ -7,9 +7,4 @@ public abstract class EnumEntity<T, A>(string entityId) : Entity<T, A>(entityId)
   where T : struct, Enum
 {
   public override abstract T ConvertStateValue(HAState state);
-
-  public override async Task Init()
-  {
-    await base.Init();
-  }
 }
