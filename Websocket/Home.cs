@@ -1,6 +1,7 @@
 namespace Websocket;
 
-using HomeAssistantSharp.Entities;
+using HomeAssistantSharp.Entities.Typed;
+using HomeAssistantSharp.Entities.Attributes;
 
 public class MotionSensorEntity : BinarySensorEntity<IBaseAttributes>
 {

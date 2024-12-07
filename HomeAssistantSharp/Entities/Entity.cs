@@ -1,5 +1,7 @@
 namespace HomeAssistantSharp.Entities;
 
+using HomeAssistantSharp.Entities.Attributes;
+
 public abstract class Entity
 {
   public static Dictionary<string, Entity> AllEntities { get; set; } = [];
@@ -44,6 +46,10 @@ public abstract class Entity<A> : Entity, IDisposable where A : IBaseAttributes
   public Entity(string id) : base(id)
   {
     Register();
+  }
+
+  public override async Task Init()
+  {
   }
 
   public Entity<A> Register()

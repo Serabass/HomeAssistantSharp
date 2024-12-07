@@ -54,6 +54,8 @@ public class WebsocketClient : IDisposable
         Data = json
       });
     }
+
+    _webSocket.Dispose();
   }
 
   public async Task Send<T>(T message)

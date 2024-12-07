@@ -1,6 +1,7 @@
 namespace HomeAssistantSharp.Entities;
 
 using Newtonsoft.Json;
+using HomeAssistantSharp.Entities.Attributes;
 
 public struct HAStateContext : IBaseAttributes
 {

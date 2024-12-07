@@ -1,4 +1,4 @@
-namespace HomeAssistantSharp.Entities;
+namespace HomeAssistantSharp.Entities.Attributes;
 
 public interface IBaseAttributes
 {

@@ -1,4 +1,6 @@
-namespace HomeAssistantSharp.Entities;
+namespace HomeAssistantSharp.Entities.Typed;
+
+using HomeAssistantSharp.Entities.Attributes;
 
 /**
   Boolean entity

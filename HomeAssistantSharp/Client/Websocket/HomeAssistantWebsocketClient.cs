@@ -24,6 +24,7 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
   {
     _websocketClient.MessageReceived += async (sender, message) =>
     {
+      Console.WriteLine($"Message received: {message.Source}");
       var messageType = GetMessageType((string)message.Data.type);
 
       switch (messageType)
