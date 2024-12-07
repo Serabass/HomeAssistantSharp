@@ -11,20 +11,8 @@ public class HomeAssistantWebsocketClient : HomeAssistantClientBase
 
   public string HAVersion { get; private set; }
 
-  public HomeAssistantWebsocketClient(string url, string token)
-  {
-    _url = new Uri(url);
-    _token = token;
-    _websocketClient = new WebsocketClient(url);
-  }
-
-  public HomeAssistantWebsocketClient(string host, short port, string token)
-  {
-    _url = new Uri($"ws://{host}:{port}/api/websocket");
-    _token = token;
-    _websocketClient = new WebsocketClient(_url);
-  }
-
+  public HomeAssistantWebsocketClient(string url, string token) : this(new Uri(url), token) { }
+  public HomeAssistantWebsocketClient(string host, short port, string token) : this(new Uri($"ws://{host}:{port}/api/websocket"), token) { }
   public HomeAssistantWebsocketClient(Uri url, string token)
   {
     _url = url;
