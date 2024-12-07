@@ -9,5 +9,5 @@ var client = new HomeAssistantWebsocketClient(
 await client.Init();
 
 var home = new Websocket.Home();
-
+await home.Init();
 Console.ReadLine();

@@ -17,17 +17,13 @@ public struct HAState
 
   [JsonProperty("entity_id")] public string EntityId { get; set; }
   public string State { get; set; }
-  public object Attributes { get; set; }
+  public dynamic Attributes { get; set; }
   public HAStateContext Context { get; set; }
   [JsonProperty("last_changed")] public DateTime LastChanged { get; set; }
   [JsonProperty("last_updated")] public DateTime LastUpdated { get; set; }
 
   public T AttributesAs<T>()
   {
-    if (Attributes == null)
-      return JsonConvert.DeserializeObject<T>("{}");
-
-    var data = JsonConvert.DeserializeObject<T>(Attributes.ToString());
-    return data;
+    return (T)Attributes;
   }
 }

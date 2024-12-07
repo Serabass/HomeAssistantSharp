@@ -19,4 +19,9 @@ public class Home
       Console.WriteLine("Kitchen motion sensor is on");
     });
   }
+
+  public async Task Init()
+  {
+    await KitchenMotionSensor.Init();
+  }
 }
