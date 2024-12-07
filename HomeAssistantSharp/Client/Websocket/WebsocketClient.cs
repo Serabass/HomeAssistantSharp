@@ -1,5 +1,7 @@
 namespace HomeAssistantSharp.Client.Websocket;
 
+#pragma warning disable CS8618
+
 using System.Net.WebSockets;
 using System.Text;
 using Newtonsoft.Json;
@@ -31,7 +33,7 @@ public class WebsocketClient : IDisposable
   public async Task ConnectAsync()
   {
     await _webSocket.ConnectAsync(_url, CancellationToken.None);
-    new Thread(() => HandleMessages()).Start();
+    new Thread(async () => await HandleMessages()).Start();
   }
 
   private async Task HandleMessages()

@@ -2,6 +2,6 @@ namespace HomeAssistantSharp.Client;
 
 public class EventMessage
 {
-  public string Source { get; set; }
-  public dynamic Data { get; set; }
+  public required string Source { get; set; }
+  public required dynamic Data { get; set; }
 }

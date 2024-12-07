@@ -1,5 +1,7 @@
 namespace HomeAssistantSharp.Client;
 
+#pragma warning disable CS8618
+
 public abstract class HomeAssistantClientBase : IDisposable
 {
   public event EventHandler AuthOk;

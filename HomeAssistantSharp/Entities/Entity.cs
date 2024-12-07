@@ -48,9 +48,13 @@ public abstract class Entity<A> : Entity, IDisposable where A : IBaseAttributes
     Register();
   }
 
+#pragma warning disable CS1998
+
   public override async Task Init()
   {
   }
+
+#pragma warning restore CS1998
 
   public Entity<A> Register()
   {

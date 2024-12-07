@@ -1,6 +1,7 @@
 namespace HomeAssistantSharp.Entities.Typed;
 
 using HomeAssistantSharp.Entities.Attributes;
+
 public abstract class EnumEntity<T, A>(string entityId) : Entity<T, A>(entityId)
   where A : IBaseAttributes
   where T : struct, Enum
