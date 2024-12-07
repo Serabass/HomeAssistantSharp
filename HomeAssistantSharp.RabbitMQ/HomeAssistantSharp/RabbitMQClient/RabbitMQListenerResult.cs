@@ -1,7 +1,7 @@
 namespace HomeAssistantSharp.RabbitMQClient;
 
-public struct RabbitMQListenerResult<D>
+public struct RabbitMQListenerResult
 {
-  public D Data;
+  public dynamic Data;
   public string Source;
 }

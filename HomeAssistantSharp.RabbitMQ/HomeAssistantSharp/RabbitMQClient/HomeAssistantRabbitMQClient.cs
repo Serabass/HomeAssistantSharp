@@ -22,9 +22,9 @@ public abstract class HomeAssistantRabbitMQClient<D> : HomeAssistantClientBase
 
   public bool Connected = false;
 
-  protected abstract D ConvertData(string str);
+  protected abstract dynamic ConvertData(string str);
 
-  public event EventHandler<RabbitMQListenerResult<D>>? OnDataReceived;
+  public event EventHandler<RabbitMQListenerResult>? OnDataReceived;
   public event EventHandler? Shutdown;
 
   public bool durable = true;
@@ -42,7 +42,7 @@ public abstract class HomeAssistantRabbitMQClient<D> : HomeAssistantClientBase
     };
   }
 
-  public override async Task ConnectAsync()
+  public async Task ConnectAsync()
   {
     if (Connected)
       return;
@@ -88,14 +88,14 @@ public abstract class HomeAssistantRabbitMQClient<D> : HomeAssistantClientBase
     {
       var body = ea.Body.Span;
       var json = Encoding.UTF8.GetString(body);
-      D data = ConvertData(json);
+      dynamic data = ConvertData(json);
 
       channel.BasicAck(ea.DeliveryTag, false);
 
       if (data == null)
         return;
 
-      OnDataReceived?.Invoke(this, new RabbitMQListenerResult<D>
+      OnDataReceived?.Invoke(this, new RabbitMQListenerResult
       {
         Data = data,
         Source = json
