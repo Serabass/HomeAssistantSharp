@@ -3,42 +3,43 @@ namespace HomeAssistantSharp.Entities;
 public abstract class Entity
 {
   public static Dictionary<string, Entity> AllEntities { get; set; } = [];
-  public string Id { get; } = id;
+  public string Id { get; }
   public HAState PrevState { get; set; }
   public HAState CurrentState { get; set; }
   public abstract Task Init();
   public event EventHandler<HAEventData>? StateChanged;
-  public abstract void InvokeStateChanged();
-  public Entity(string id) : base(id)
+
+  public void InvokeStateChanged()
   {
+    if (CurrentState.IsUnavailable) return;
+
+    StateChanged?.Invoke(this, new()
+    {
+      EntityId = Id,
+      Old = PrevState,
+      New = CurrentState
+    });
+  }
+
+  public Entity(string id)
+  {
+    Id = id;
     // Subscribe();
     // Register();
 
     StateChanged += (sender, stateMessage) =>
     {
-      PrevState = stateMessage.oldState;
-      CurrentState = stateMessage.newState;
+      PrevState = stateMessage.Old;
+      CurrentState = stateMessage.New;
     };
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public abstract class Entity<A> : Entity, IDisposable where A : IBaseAttributes
+public abstract class Entity<A>(string id) : Entity(id), IDisposable where A : IBaseAttributes
 {
   public abstract A Attributes { get; }
-
-  public override void InvokeStateChanged()
-  {
-    if (CurrentState.IsUnavailable) return;
-
-    StateChanged?.Invoke(this, new()
-    {
-      entityId = Id,
-      oldState = PrevState,
-      newState = CurrentState
-    });
-  }
 
   public virtual void Dispose()
   {
@@ -52,7 +53,7 @@ public abstract class Entity<A> : Entity, IDisposable where A : IBaseAttributes
 
 public abstract partial class Entity<T, A> : Entity<A> where A : IBaseAttributes
 {
-  public override A Attributes => CurrentState.Attributes<A>();
+  public override A Attributes => CurrentState.AttributesAs<A>();
 
   public T StateValue => ConvertStateValue(CurrentState);
 
@@ -64,8 +65,8 @@ public abstract partial class Entity<T, A> : Entity<A> where A : IBaseAttributes
   {
     StateChanged += (s, m) =>
     {
-      PrevState = m.oldState;
-      CurrentState = m.newState;
+      PrevState = m.Old;
+      CurrentState = m.New;
     };
   }
 }

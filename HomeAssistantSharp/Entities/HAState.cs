@@ -12,21 +12,21 @@ public struct HAStateContext : IBaseAttributes
 
 public struct HAState
 {
-  public readonly bool IsUnavailable => state == "unavailable" || attributes == null || state == null;
+  public readonly bool IsUnavailable => State == "unavailable" || Attributes == null || State == null;
 
-  [JsonProperty("entity_id")] public string entityId { get; set; }
-  public string state { get; set; }
-  public object attributes { get; set; }
-  public HAStateContext context { get; set; }
-  [JsonProperty("last_changed")] public DateTime lastChanged { get; set; }
-  [JsonProperty("last_updated")] public DateTime lastUpdated { get; set; }
+  [JsonProperty("entity_id")] public string EntityId { get; set; }
+  public string State { get; set; }
+  public object Attributes { get; set; }
+  public HAStateContext Context { get; set; }
+  [JsonProperty("last_changed")] public DateTime LastChanged { get; set; }
+  [JsonProperty("last_updated")] public DateTime LastUpdated { get; set; }
 
-  public T Attributes<T>()
+  public T AttributesAs<T>()
   {
-    if (attributes == null)
+    if (Attributes == null)
       return JsonConvert.DeserializeObject<T>("{}");
 
-    var data = JsonConvert.DeserializeObject<T>(attributes.ToString());
+    var data = JsonConvert.DeserializeObject<T>(Attributes.ToString());
     return data;
   }
 }
