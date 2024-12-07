@@ -37,9 +37,20 @@ public abstract class Entity
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-public abstract class Entity<A>(string id) : Entity(id), IDisposable where A : IBaseAttributes
+public abstract class Entity<A> : Entity, IDisposable where A : IBaseAttributes
 {
   public abstract A Attributes { get; }
+
+  public Entity(string id) : base(id)
+  {
+    Register();
+  }
+
+  public Entity<A> Register()
+  {
+    AllEntities.Add(Id, this);
+    return this;
+  }
 
   public virtual void Dispose()
   {

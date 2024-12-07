@@ -6,14 +6,8 @@ var client = new HomeAssistantWebsocketClient(
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI1Y2Y4NTFiYzhiNTc0M2JiODA2M2U5ZGE5NzgzNTE2OCIsImlhdCI6MTcxOTI5MzgzOSwiZXhwIjoyMDM0NjUzODM5fQ.AyVoJzwscxvJ403zacMOX2Vc78W_CgiusUdCZ0amPcc"
 );
 
-client.Ready += (sender, args) =>
-{
-  Console.WriteLine("Ready");
+await client.Init();
 
-  client.Event += (sender, msg) =>
-  {
-    Console.WriteLine($"Event received - {msg.Source}: {msg.Data}");
-  };
-};
+var home = new Websocket.Home();
 
-await client.ConnectAsync();
+Console.ReadLine();

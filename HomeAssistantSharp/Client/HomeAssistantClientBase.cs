@@ -23,6 +23,19 @@ public abstract class HomeAssistantClientBase : IDisposable
   protected void InvokeAuthInvalid() => AuthInvalid?.Invoke(this, EventArgs.Empty);
   protected void InvokeReady() => Ready?.Invoke(this, EventArgs.Empty);
   protected void InvokeEvent(object sender, EventMessage message) => Event?.Invoke(sender, message);
-  public abstract Task ConnectAsync();
+
+  public virtual async Task Init()
+  {
+    Ready += (sender, args) =>
+    {
+      Console.WriteLine("Ready");
+
+      Event += (sender, msg) =>
+      {
+        // Console.WriteLine($"Event received - {msg.Source}: {msg.Data}");
+      };
+    };
+  }
+
   public abstract void Dispose();
 }

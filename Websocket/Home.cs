@@ -13,9 +13,9 @@ public class Home
 
   public Home()
   {
-    KitchenMotionSensor.StateChanged += (sender, args) =>
+    KitchenMotionSensor.On(true, () =>
     {
-      Console.WriteLine($"Kitchen motion sensor state changed to {args.New.State}");
-    };
+      Console.WriteLine("Kitchen motion sensor is on");
+    });
   }
 }
